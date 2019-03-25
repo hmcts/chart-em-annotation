@@ -1,0 +1,7 @@
+# If a service wants to use us, they'd add this product chart to requirements.yaml.
+# Then they could override em-anno microservice chart to add their team to the s2s whitelist, as shown.
+# Note that this would go in their product chart, not this one.
+
+#em-anno:
+#  environment:
+#    S2S_NAMES_WHITELIST: amended list of services would go here
