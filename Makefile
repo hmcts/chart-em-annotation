@@ -4,7 +4,7 @@ CI_VALUES := ci-values.yaml
 RELEASE := chart-${CHART}-release
 NAMESPACE := chart-tests
 TEST := ${RELEASE}-test-service
-ACR := hmctssandbox
+ACR := hmcts
 AKS_RESOURCE_GROUP := cnp-aks-sandbox-rg
 AKS_CLUSTER := cnp-aks-sandbox-cluster
 
