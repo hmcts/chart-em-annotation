@@ -20,13 +20,13 @@ global:
 
 ### EM SERVICES ###
 em-anno:
-  java:
+  em-anno:
     image: hmcts.azurecr.io/hmcts/em-anno:latest
     readinessDelay: 120 # plenty time for dependencies all start
     livenessDelay: 120 # plenty time for dependencies all start
 
 em-npa:
-  java:
+  npa-app:
     image: hmcts.azurecr.io/hmcts/em-npa:latest
     readinessDelay: 120 # plenty time for dependencies all start
     livenessDelay: 120 # plenty time for dependencies all start
