@@ -5,3 +5,17 @@
 #em-anno:
 #  environment:
 #    S2S_NAMES_WHITELIST: amended list of services would go here
+
+em-anno:
+  java:
+    image: https://hmctssandbox.azurecr.io/hmcts/em-anno:latest
+  image: https://hmctssandbox.azurecr.io/hmcts/em-anno:latest
+  environment:
+    IMAGE_NAME: https://hmctssandbox.azurecr.io/hmcts/em-anno:latest
+    imageName: https://hmctssandbox.azurecr.io/hmcts/em-anno:latest
+
+em-npa:
+  environment:
+    IMAGE_NAME: https://hmctssandbox.azurecr.io/hmcts/em-npa:latest
+    imageName: https://hmctssandbox.azurecr.io/hmcts/em-npa:latest
+  Image: https://hmctssandbox.azurecr.io/hmcts/em-npa:latest

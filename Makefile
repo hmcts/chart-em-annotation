@@ -2,11 +2,11 @@
 CHART := em-annotation
 CI_VALUES := ci-values.yaml
 RELEASE := chart-${CHART}-release
-NAMESPACE := chart-tests
+NAMESPACE := evidence-mment
 TEST := ${RELEASE}-test-service
 ACR := hmcts
-AKS_RESOURCE_GROUP := cnp-aks-sandbox-rg
-AKS_CLUSTER := cnp-aks-sandbox-cluster
+AKS_RESOURCE_GROUP := cnp-aks-rg
+AKS_CLUSTER := cnp-aks-cluster
 
 setup:
 	az configure --defaults acr=${ACR}
