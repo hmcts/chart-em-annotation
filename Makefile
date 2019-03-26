@@ -2,7 +2,7 @@
 CHART := em-annotation
 CI_VALUES := ci-values.yaml
 RELEASE := chart-${CHART}-release
-NAMESPACE := evidence-mment
+NAMESPACE := chart-tests
 TEST := ${RELEASE}-test-service
 ACR := hmcts
 AKS_RESOURCE_GROUP := cnp-aks-rg
