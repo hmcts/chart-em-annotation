@@ -22,11 +22,27 @@ global:
 em-anno:
   em-anno:
     image: hmcts.azurecr.io/hmcts/em-anno:latest
-    readinessDelay: 120 # plenty time for dependencies all start
-    livenessDelay: 120 # plenty time for dependencies all start
+    readinessDelay: 200 # plenty time for dependencies all start
+    livenessDelay: 200 # plenty time for dependencies all start
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://chart-em-annotation-release-rpa-em-annotation-db:5432/emannotationapp?ssl=disable
+      IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
+      S2S_BASE_URI: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
+      DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
+      IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
+
 
 em-npa:
   npa-app:
     image: hmcts.azurecr.io/hmcts/em-npa:latest
-    readinessDelay: 120 # plenty time for dependencies all start
-    livenessDelay: 120 # plenty time for dependencies all start
+    readinessDelay: 200 # plenty time for dependencies all start
+    livenessDelay: 200 # plenty time for dependencies all start
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://chart-em-annotation-release-rpa-npa-db:5432/emnpa?ssl=disable
+      IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
+      S2S_BASE_URI: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
+      DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
+      EM_ANNO_APP_URL: http://em-anno-saat.service.core-compute-saat.internal
+      IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
+
+

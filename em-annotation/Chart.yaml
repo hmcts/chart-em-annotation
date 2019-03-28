@@ -2,7 +2,7 @@ apiVersion: v1
 description: |-
   A Helm chart for the HMCTS EM Annotation product which allows you to annotate and highlight PDF documents.
 name: em-annotation
-version: 0.0.1
+version: 0.0.2
 # What do I do here?
 icon: https://github.com/hmcts/chart-em-annotation/raw/master/images/icons8-java-50.png
 keywords:
