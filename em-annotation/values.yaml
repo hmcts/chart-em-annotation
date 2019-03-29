@@ -25,7 +25,6 @@ em-anno:
       S2S_BASE_URI: http://rpe-service-auth-provider
       DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
 
-
 em-npa:
   npa-app:
     image: hmcts.azurecr.io/hmcts/em-npa:latest
@@ -51,10 +50,21 @@ rpe-service-auth-provider:
     releaseNameOverride: rpe-service-auth-provider
     image: hmcts.azurecr.io/hmcts/rpe-service-auth-provider:latest
 
-#dm-store:
-#  java:
-#    releaseNameOverride: dm-store
-#    image: hmcts.azurecr.io/hmcts/dm-store:latest
-#    environment:
-#      IDAM_USER_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
-#      IDAM_S2S_BASE_URI: http://rpe-service-auth-provider
+dm-store:
+  java:
+    releaseNameOverride: dm-store
+    image: hmcts.azurecr.io/hmcts/dm-store:latest
+    environment:
+      # TODO Check what DM store call these endpoints in describe pod!!!!!
+      IDAM_USER_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
+      IDAM_S2S_BASE_URI: http://rpe-service-auth-provider
+    secrets:
+      STORAGE_ACCOUNT_NAME:
+        secretRef: storage-secret-em-annotation
+        key: storageAccountName
+        STORAGE_ACCOUNT_KEY:
+          secretRef: storage-secret-em-annotation
+          key: accessKey
+        STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
+          secretRef: container-secret-em-annotation-dm-docstore
+          key: containerName

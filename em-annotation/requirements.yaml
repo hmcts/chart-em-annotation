@@ -11,10 +11,10 @@ dependencies:
     version: ~0.0.2
     repository: '@hmcts'
 
-##  Use SAAT DM store, since there's a weird secret thing going on. In future, use dm-store chart.
-#  - name: dm-store
-#    version: ~0.0.1
-#    repository: '@hmcts'
+#  Use SAAT DM store, since there's a weird secret thing going on. In future, use dm-store chart.
+  - name: dm-store
+    version: ~0.0.1
+    repository: '@hmcts'
 
 #  - Should I skip IDAM? Yes, no supported IDAM docker images.
 #  - Should I skip smtp-server? Yes, probably.
