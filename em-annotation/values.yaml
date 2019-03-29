@@ -1,17 +1,6 @@
 # If a service wants to use us, they'd add this product chart to requirements.yaml.
-# Then they could override em-anno microservice chart to add their team to the s2s whitelist, as shown.
+# Then they could override em-anno microservice chart to add their team to the s2s whitelist.
 # Note that this would go in their product chart, not this one.
-
-#em-anno:
-#  environment:
-#    S2S_NAMES_WHITELIST: amended list of services would go here
-
-# what is this?
-#tags:
-#  cmc-claim-store-postgresql-pod: false # claim-store chart
-#  cmc-citizen-frontend-pod: false       # claim-store chart
-#  rpe-feature-toggle-api-pod: true      # citizen-frontend dep
-#  postgresql-pod: false                 # any chart specific postgres
 
 global:
   environment: saat
@@ -22,27 +11,50 @@ global:
 em-anno:
   em-anno:
     image: hmcts.azurecr.io/hmcts/em-anno:latest
-    readinessDelay: 200 # plenty time for dependencies all start
-    livenessDelay: 200 # plenty time for dependencies all start
+    readinessDelay: 40
+    readinessTimeout: 20
+    readinessFailureThreshold: 20
+    readinessPeriod: 15
+    livenessDelay: 40
+    livenessTimeout: 20
+    livenessPeriod: 15
+    livenessFailureThreshold: 20
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://chart-em-annotation-release-rpa-em-annotation-db:5432/emannotationapp?ssl=disable
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
-      S2S_BASE_URI: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
+      S2S_BASE_URI: http://rpe-service-auth-provider
       DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
-      IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
 
 
 em-npa:
   npa-app:
     image: hmcts.azurecr.io/hmcts/em-npa:latest
-    readinessDelay: 200 # plenty time for dependencies all start
-    livenessDelay: 200 # plenty time for dependencies all start
+    readinessDelay: 40
+    readinessTimeout: 20
+    readinessFailureThreshold: 20
+    readinessPeriod: 15
+    livenessDelay: 40
+    livenessTimeout: 20
+    livenessPeriod: 15
+    livenessFailureThreshold: 20
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://chart-em-annotation-release-rpa-npa-db:5432/emnpa?ssl=disable
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
-      S2S_BASE_URI: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
-      DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
-      EM_ANNO_APP_URL: http://em-anno-saat.service.core-compute-saat.internal
-      IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
+      EM_ANNO_APP_URL: http://em-anno
+      S2S_BASE_URI: http://rpe-service-auth-provider
+      #      Eventually switch over to using locally sourced this
+      DM_STORE_APP_URL: http://dm-store
 
+##### DEPENDENCIES #####
+rpe-service-auth-provider:
+  java:
+    releaseNameOverride: rpe-service-auth-provider
+    image: hmcts.azurecr.io/hmcts/rpe-service-auth-provider:latest
 
+#dm-store:
+#  java:
+#    releaseNameOverride: dm-store
+#    image: hmcts.azurecr.io/hmcts/dm-store:latest
+#    environment:
+#      IDAM_USER_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
+#      IDAM_S2S_BASE_URI: http://rpe-service-auth-provider

@@ -1,15 +1,21 @@
 dependencies:
   - name: em-npa
-    version: ~0.0.2
+    version: ~0.0.4
     repository: '@hmcts'
   - name: em-anno
     version: ~0.0.1
     repository: '@hmcts'
+
     # Non-EM dependencies - find out chart names and versions
-    # For now, no dm store chart, so we use AAT. In future, use dm-store chart.
+  - name: rpe-service-auth-provider
+    version: ~0.0.2
+    repository: '@hmcts'
+
+#  Use SAAT DM store, since there's a weird secret thing going on. In future, use dm-store chart.
 #  - name: dm-store
-#    # update version
 #    version: ~0.0.1
 #    repository: '@hmcts'
-#  - Should I skip IDAM and S2S? Yes, no supported IDAM docker images.
-#  - Should I skip smtp-server? No, probably. IDAM might use it, but we're using AAT idam, so we don't care if it uses it.
+
+#  - Should I skip IDAM? Yes, no supported IDAM docker images.
+#  - Should I skip smtp-server? Yes, probably.
+#  - IDAM might use it, but we're using SAAT idam, so we don't care if it uses it.
