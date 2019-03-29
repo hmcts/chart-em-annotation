@@ -19,6 +19,9 @@ clean:
 	-helm delete --purge ${RELEASE}
 	-kubectl delete pod ${TEST} -n ${NAMESPACE}
 
+delete:
+	-helm delete --purge ${RELEASE}
+
 lint:
 	helm lint ${CHART} --namespace ${NAMESPACE} -f ci-values.yaml
 
