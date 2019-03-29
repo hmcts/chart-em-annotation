@@ -43,7 +43,7 @@ em-npa:
       EM_ANNO_APP_URL: http://em-anno
       S2S_BASE_URI: http://rpe-service-auth-provider
       #      Eventually switch over to using locally sourced this
-      DM_STORE_APP_URL: http://dm-store
+      DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
 
 ##### DEPENDENCIES #####
 rpe-service-auth-provider:

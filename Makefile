@@ -15,6 +15,9 @@ setup:
 	az aks get-credentials --resource-group ${AKS_RESOURCE_GROUP} --name ${AKS_CLUSTER} --overwrite-existing --subscription ${SUBSCRIPTION}
 	helm dependency update ${CHART}
 
+delete:
+	-helm delete --purge ${RELEASE}
+
 clean:
 	-helm delete --purge ${RELEASE}
 	-kubectl delete pod ${TEST} -n ${NAMESPACE}
