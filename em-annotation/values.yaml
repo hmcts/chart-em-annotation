@@ -51,6 +51,8 @@ dm-store:
   blobstorage:
     enabled: true
   java:
+    postgresql:
+      fullnameOverride: dm-store-postgresql
     releaseNameOverride: dm-store
     image: hmcts.azurecr.io/hmcts/dm-store:latest
     keyVaults:
@@ -64,3 +66,6 @@ dm-store:
       IDAM_S2S_BASE_URI: http://rpe-service-auth-provider
       ENABLE_DB_MIGRATE: 'true'
       ENABLE_TTL: 'false'
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://dm-store-postgresql:5432/evidence'
+postgresql:
+  enabled: true
