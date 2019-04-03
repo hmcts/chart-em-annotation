@@ -20,10 +20,9 @@ em-anno:
     livenessPeriod: 15
     livenessFailureThreshold: 20
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://chart-em-annotation-release-rpa-em-annotation-db:5432/emannotationapp?ssl=disable
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
       S2S_BASE_URI: http://rpe-service-auth-provider
-      DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
+      DM_STORE_APP_URL: http://dm-store
 
 em-npa:
   npa-app:
@@ -37,12 +36,10 @@ em-npa:
     livenessPeriod: 15
     livenessFailureThreshold: 20
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://chart-em-annotation-release-rpa-npa-db:5432/emnpa?ssl=disable
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
       EM_ANNO_APP_URL: http://em-anno
       S2S_BASE_URI: http://rpe-service-auth-provider
-      #      Eventually switch over to using locally sourced this
-      DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
+      DM_STORE_APP_URL: http://dm-store
 
 ##### DEPENDENCIES #####
 rpe-service-auth-provider:
@@ -51,20 +48,19 @@ rpe-service-auth-provider:
     image: hmcts.azurecr.io/hmcts/rpe-service-auth-provider:latest
 
 dm-store:
+  blobstorage:
+    enabled: true
   java:
     releaseNameOverride: dm-store
     image: hmcts.azurecr.io/hmcts/dm-store:latest
+    keyVaults:
+      ccd:
+        resourceGroup: ccd-shared
+        secrets:
+          - dm-store-storage-account-primary-connection-string
+          - dm-store-storage-account-secondary-connection-string
     environment:
-      # TODO Check what DM store call these endpoints in describe pod!!!!!
       IDAM_USER_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
       IDAM_S2S_BASE_URI: http://rpe-service-auth-provider
-    secrets:
-      STORAGE_ACCOUNT_NAME:
-        secretRef: storage-secret-em-annotation
-        key: storageAccountName
-        STORAGE_ACCOUNT_KEY:
-          secretRef: storage-secret-em-annotation
-          key: accessKey
-        STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
-          secretRef: container-secret-em-annotation-dm-docstore
-          key: containerName
+      ENABLE_DB_MIGRATE: 'true'
+      ENABLE_TTL: 'false'
