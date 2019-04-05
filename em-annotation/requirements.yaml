@@ -1,9 +1,9 @@
 dependencies:
   - name: em-npa
-    version: ~0.0.4
+    version: ~0.0.5
     repository: '@hmcts'
   - name: em-anno
-    version: ~0.0.1
+    version: ~0.0.2
     repository: '@hmcts'
 
 # Non-EM dependencies - find out chart names and versions
