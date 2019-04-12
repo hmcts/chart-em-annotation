@@ -12,109 +12,57 @@ postgresql:
 
 ### EM SERVICES ###
 em-anno:
-  em-anno:
-    releaseNameOverride: chart-em-annotation-release-em-anno
+  anno:
+    postgresql:
+      nameOverride: em-anno-db
+    releaseNameOverride: chart-em-annotation-em-anno
     image: hmcts.azurecr.io/hmcts/em-anno:latest
-    readinessDelay: 40
-    readinessTimeout: 5
-    readinessPeriod: 15
-    readinessFailureThreshold: 10
-    livenessDelay: 40
-    livenessTimeout: 5
-    livenessPeriod: 15
-    livenessFailureThreshold: 10
     # TODO use real liveness path
     livenessPath: '/health'
     environment:
-#      SPRING_DATASOURCE_URL_ORIGINAL: jdbc:postgresql://chart-em-annotation-rpa-em-annotation-db:5432/emannotationapp
-      #      # Switch to below after updating microservice chart
-#      SPRING_DATASOURCE_URL_THAT_REAL_ONE_SHOULD_LOOK_LIKE: jdbc:postgresql://chart-em-annotation-em-anno-db:5432/emannotationapp
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-em-anno-db:5432/emannotationapp'
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
-      S2S_BASE_URI: http://chart-em-annotation-release-rpe-s2s
-#      DM_STORE_APP_URL: http://chart-em-annotation-dm-store
-      DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
-
+      S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
+      DM_STORE_APP_URL: http://chart-em-annotation-dm-store
 
 em-npa:
-  java:
-    releaseNameOverride: chart-em-annotation-release-em-npa
+  npa:
+    postgresql:
+      nameOverride: em-npa-db
+    releaseNameOverride: chart-em-annotation-em-npa
     image: hmcts.azurecr.io/hmcts/em-npa:latest
-    readinessDelay: 40
-    readinessTimeout: 5
-    readinessPeriod: 15
-    readinessFailureThreshold: 10
-    livenessDelay: 40
-    livenessTimeout: 5
-    livenessPeriod: 15
-    livenessFailureThreshold: 10
     # TODO use real liveness path
     livenessPath: '/health'
     environment:
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-em-npa-db:5432/emnpa'
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
-      DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
-      EM_ANNO_APP_URL: http://chart-em-annotation-release-em-anno
-      S2S_BASE_URI: http://chart-em-annotation-release-rpe-s2s
-      #      DM_STORE_APP_URL: http://dm-store
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-rpa-npa-db:5432/emnpa'
-      SPRING_DATASOURCE_USERNAME: emnpa
-      SPRING_DATASOURCE_PASSWORD: emnpa
-      ENABLE_DB_MIGRATE: true
-      REFORM_SERVICE_NAME: em-npa
-      REFORM_TEAM: evidence
-      REFORM_SERVICE_TYPE: java
-      REFORM_ENVIRONMENT: preview
-      PACKAGES_NAME: em-npa
-      PACKAGES_PROJECT: evidence
-      PACKAGES_ENVIRONMENT: preview
-      JSON_CONSOLE_PRETTY_PRINT: false
-      LOG_OUTPUT: single
-      ROOT_LOGGING_LEVEL: INFO
-      LOG_LEVEL_SPRING_WEB: INFO
-      LOG_LEVEL_DM: INFO
-      SHOW_SQL: true
-      ENDPOINTS_HEALTH_SENSITIVE: false
-      ENDPOINTS_INFO_SENSITIVE: false
-      S2S_NAMES_WHITELIST: em_api,em_gw,ccd_gw,ccd_data,sscs,divorce_document_upload,divorce_document_generator,probate_backend,jui_webapp,pui_webapp
-      CASE_WORKER_ROLES: caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce
-      ENABLE_IDAM_HEALTH_CHECK: false
-      ENABLE_S2S_HEALTH_CHECK: false
-      ENABLE_LIQUIBASE: true
-      SERVER_PORT: 8080
-      #    SPRING_DATASOURCE_URL: "jdbc:postgresql://{{ .Release.Name }}-{{ .Values.postgresql.nameOverride}}:5432/{{ .Values.postgresql.postgresqlDatabase}}?ssl=disable"
-      #    SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.postgresqlUsername}}"
-      #    SPRING_DATASOURCE_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
-      # Regardless of environment, point towards AAT instances. Overwrite in product charts etc.
-      #    IDAM_API_BASE_URI: https://idam-api.aat.platform.hmcts.net
-      #    S2S_BASE_URI: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-      #    DM_STORE_APP_URL: http://dm-store-aat.service.core-compute-aat.internal
-      #    EM_ANNO_APP_URL: http://em-anno-aat.service.core-compute-aat.internal
-
-
+      DM_STORE_APP_URL: http://chart-em-annotation-dm-store
+      EM_ANNO_APP_URL: http://chart-em-annotation-em-anno
+      S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
 
 ##### DEPENDENCIES #####
 rpe-service-auth-provider:
   java:
-    releaseNameOverride: chart-em-annotation-release-rpe-s2s
+    releaseNameOverride: chart-em-annotation-rpe-s2s
     image: hmcts.azurecr.io/hmcts/rpe-service-auth-provider:latest
 
-#dm-store:
-#  blobstorage:
-#    enabled: true
-#  java:
-#    postgresql:
-#      nameOverride: dm-store-db
-#    releaseNameOverride: chart-em-annotation-dm-store
-#    image: hmcts.azurecr.io/hmcts/dm-store:latest
-#    keyVaults:
-#      ccd:
-#        resourceGroup: ccd-shared
-#        secrets:
-#          - dm-store-storage-account-primary-connection-string
-#          - dm-store-storage-account-secondary-connection-string
-#    environment:
-#      IDAM_USER_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
-#      IDAM_S2S_BASE_URI: http://chart-em-annotation-release-rpe-s2s
-#      ENABLE_DB_MIGRATE: 'true'
-#      ENABLE_TTL: 'false'
-#      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-dm-store-db:5432/evidence'
-#      SPRING_DATASOURCE_URL_TEMPLATED: 'jdbc:postgresql://{{ .Release.Name }}-{{ .Values.postgresql.nameOverride}}:5432/{{ .Values.postgresql.postgresqlDatabase}}'
+dm-store:
+  blobstorage:
+    enabled: true
+  java:
+    postgresql:
+      nameOverride: dm-store-db
+    releaseNameOverride: chart-em-annotation-dm-store
+    image: hmcts.azurecr.io/hmcts/dm-store:latest
+    keyVaults:
+      ccd:
+        resourceGroup: ccd-shared
+        secrets:
+          - dm-store-storage-account-primary-connection-string
+          - dm-store-storage-account-secondary-connection-string
+    environment:
+      IDAM_USER_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
+      IDAM_S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-dm-store-db:5432/evidence'
+      ENABLE_DB_MIGRATE: 'true'
+      ENABLE_TTL: 'false'

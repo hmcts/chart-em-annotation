@@ -1,9 +1,9 @@
 dependencies:
   - name: em-npa
-    version: ~0.0.5
+    version: ~0.0.9
     repository: '@hmcts'
   - name: em-anno
-    version: ~0.0.2
+    version: ~0.0.3
     repository: '@hmcts'
 
 # Non-EM dependencies - find out chart names and versions
@@ -11,9 +11,9 @@ dependencies:
     version: ~0.0.2
     repository: '@hmcts'
 
-#  - name: dm-store
-#    version: ~1.0.0
-#    repository: '@hmcts'
+  - name: dm-store
+    version: ~1.0.1
+    repository: '@hmcts'
 
 #  - Should I skip IDAM? Yes, no supported IDAM docker images.
 #  - Should I skip smtp-server? Yes, probably. IDAM might use it, but we're using SAAT idam, so we don't care if it uses it.

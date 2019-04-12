@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := all
 CHART := em-annotation
 CI_VALUES := ci-values.yaml
-RELEASE := chart-${CHART}-release
+RELEASE := chart-${CHART}
 NAMESPACE := chart-tests
 TEST := ${RELEASE}-test-service
 ACR := hmctssandbox
