@@ -1,48 +1,85 @@
 # If a service wants to use us, they'd add this product chart to requirements.yaml.
-# Then they could override em-anno microservice chart to add their team to the s2s whitelist, as shown.
+# Then they could override em-anno microservice chart to add their team to the s2s whitelist.
 # Note that this would go in their product chart, not this one.
-
-#em-anno:
-#  environment:
-#    S2S_NAMES_WHITELIST: amended list of services would go here
-
-# what is this?
-#tags:
-#  cmc-claim-store-postgresql-pod: false # claim-store chart
-#  cmc-citizen-frontend-pod: false       # claim-store chart
-#  rpe-feature-toggle-api-pod: true      # citizen-frontend dep
-#  postgresql-pod: false                 # any chart specific postgres
 
 global:
   environment: saat
   subscriptionId: "bf308a5c-0624-4334-8ff8-8dca9fd43783"
   tenantId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
 
+tags:
+  postgresql-pod: false                 # any chart specific postgres
+  blobstorage: true                     # blob storage for dm-store
+
+postgresql:
+  resources:
+    requests:
+      cpu: 25m
+  initdbScripts:
+    init.sql: |-
+      CREATE USER emannotationapp WITH PASSWORD 'emannotationapp';
+      CREATE DATABASE emannotationapp WITH OWNER = emannotationapp ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE USER emnpa WITH PASSWORD 'emnpa';
+      CREATE DATABASE emnpa WITH OWNER = emnpa ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE USER evidence WITH PASSWORD 'evidence';
+      CREATE DATABASE evidence WITH OWNER = evidence ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+  nameOverride: postgres-db
+  persistence:
+    enabled: false
+
 ### EM SERVICES ###
 em-anno:
-  em-anno:
+  anno:
+#    postgresql:
+#      nameOverride: em-anno-db
+    releaseNameOverride: chart-em-annotation-em-anno
     image: hmcts.azurecr.io/hmcts/em-anno:latest
-    readinessDelay: 200 # plenty time for dependencies all start
-    livenessDelay: 200 # plenty time for dependencies all start
+    # TODO use real liveness path
+    livenessPath: '/health'
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://chart-em-annotation-release-rpa-em-annotation-db:5432/emannotationapp?ssl=disable
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/emannotationapp'
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
-      S2S_BASE_URI: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
-      DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
-      IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
-
+      S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
+      DM_STORE_APP_URL: http://chart-em-annotation-dm-store
 
 em-npa:
-  npa-app:
+  npa:
+#    postgresql:
+#      nameOverride: em-npa-db
+    releaseNameOverride: chart-em-annotation-em-npa
     image: hmcts.azurecr.io/hmcts/em-npa:latest
-    readinessDelay: 200 # plenty time for dependencies all start
-    livenessDelay: 200 # plenty time for dependencies all start
+    # TODO use real liveness path
+    livenessPath: '/health'
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://chart-em-annotation-release-rpa-npa-db:5432/emnpa?ssl=disable
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/emnpa'
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
-      S2S_BASE_URI: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
-      DM_STORE_APP_URL: http://dm-store-saat.service.core-compute-saat.internal
-      EM_ANNO_APP_URL: http://em-anno-saat.service.core-compute-saat.internal
-      IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-saat.service.core-compute-saat.internal
+      DM_STORE_APP_URL: http://chart-em-annotation-dm-store
+      EM_ANNO_APP_URL: http://chart-em-annotation-em-anno
+      S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
 
+##### DEPENDENCIES #####
+rpe-service-auth-provider:
+  java:
+    releaseNameOverride: chart-em-annotation-rpe-s2s
+    image: hmcts.azurecr.io/hmcts/rpe-service-auth-provider:latest
 
+dm-store:
+  blobstorage:
+    enabled: true
+  java:
+#    postgresql:
+#      nameOverride: dm-store-db
+    releaseNameOverride: chart-em-annotation-dm-store
+    image: hmcts.azurecr.io/hmcts/dm-store:latest
+    keyVaults:
+      ccd:
+        resourceGroup: ccd-shared
+        secrets:
+          - dm-store-storage-account-primary-connection-string
+          - dm-store-storage-account-secondary-connection-string
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/evidence'
+      IDAM_USER_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
+      IDAM_S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
+      ENABLE_DB_MIGRATE: 'true'
+      ENABLE_TTL: 'false'

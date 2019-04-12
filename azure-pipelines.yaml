@@ -41,5 +41,5 @@ jobs:
       - template: steps/charts/release.yaml@cnp-library
         parameters:
           chartName: em-annotation
-          chartReleaseName: chart-em-annotation
+          chartReleaseName: chart-em-annotation-release-1
           chartNamespace: chart-tests

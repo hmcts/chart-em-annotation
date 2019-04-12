@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := all
 CHART := em-annotation
 CI_VALUES := ci-values.yaml
-RELEASE := chart-${CHART}-release
+RELEASE := chart-${CHART}-release-1
 NAMESPACE := chart-tests
 TEST := ${RELEASE}-test-service
 ACR := hmctssandbox
@@ -14,6 +14,9 @@ setup:
 	az acr helm repo add -n hmcts
 	az aks get-credentials --resource-group ${AKS_RESOURCE_GROUP} --name ${AKS_CLUSTER} --overwrite-existing --subscription ${SUBSCRIPTION}
 	helm dependency update ${CHART}
+
+delete:
+	-helm delete --purge ${RELEASE}
 
 clean:
 	-helm delete --purge ${RELEASE}
@@ -29,7 +32,7 @@ inspect:
 	helm inspect chart ${CHART}
 
 deploy:
-	helm install ${CHART} --name ${RELEASE} --namespace ${NAMESPACE} -f ${CI_VALUES}  --wait  --timeout 300
+	helm install ${CHART} --name ${RELEASE} --namespace ${NAMESPACE} -f ${CI_VALUES}  --wait  --timeout 500
 
 test:
 	helm test ${RELEASE}
