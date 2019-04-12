@@ -7,34 +7,51 @@ global:
   subscriptionId: "bf308a5c-0624-4334-8ff8-8dca9fd43783"
   tenantId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
 
+tags:
+  postgresql-pod: false                 # any chart specific postgres
+  blobstorage: true                     # blob storage for dm-store
+
 postgresql:
-  enabled: true
+  resources:
+    requests:
+      cpu: 25m
+  initdbScripts:
+    init.sql: |-
+      CREATE USER emannotationapp WITH PASSWORD 'emannotationapp';
+      CREATE DATABASE emannotationapp WITH OWNER = emannotationapp ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE USER emnpa WITH PASSWORD 'emnpa';
+      CREATE DATABASE emnpa WITH OWNER = emnpa ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE USER evidence WITH PASSWORD 'evidence';
+      CREATE DATABASE evidence WITH OWNER = evidence ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+  nameOverride: postgres-db
+  persistence:
+    enabled: false
 
 ### EM SERVICES ###
 em-anno:
   anno:
-    postgresql:
-      nameOverride: em-anno-db
+#    postgresql:
+#      nameOverride: em-anno-db
     releaseNameOverride: chart-em-annotation-em-anno
     image: hmcts.azurecr.io/hmcts/em-anno:latest
     # TODO use real liveness path
     livenessPath: '/health'
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-em-anno-db:5432/emannotationapp'
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/emannotationapp'
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
       S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
       DM_STORE_APP_URL: http://chart-em-annotation-dm-store
 
 em-npa:
   npa:
-    postgresql:
-      nameOverride: em-npa-db
+#    postgresql:
+#      nameOverride: em-npa-db
     releaseNameOverride: chart-em-annotation-em-npa
     image: hmcts.azurecr.io/hmcts/em-npa:latest
     # TODO use real liveness path
     livenessPath: '/health'
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-em-npa-db:5432/emnpa'
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/emnpa'
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
       DM_STORE_APP_URL: http://chart-em-annotation-dm-store
       EM_ANNO_APP_URL: http://chart-em-annotation-em-anno
@@ -50,8 +67,8 @@ dm-store:
   blobstorage:
     enabled: true
   java:
-    postgresql:
-      nameOverride: dm-store-db
+#    postgresql:
+#      nameOverride: dm-store-db
     releaseNameOverride: chart-em-annotation-dm-store
     image: hmcts.azurecr.io/hmcts/dm-store:latest
     keyVaults:
@@ -61,8 +78,8 @@ dm-store:
           - dm-store-storage-account-primary-connection-string
           - dm-store-storage-account-secondary-connection-string
     environment:
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/evidence'
       IDAM_USER_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
       IDAM_S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-dm-store-db:5432/evidence'
       ENABLE_DB_MIGRATE: 'true'
       ENABLE_TTL: 'false'

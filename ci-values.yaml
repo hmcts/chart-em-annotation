@@ -1,5 +1,5 @@
 em-annotation:
-  ingressHost: chart-em-annotation.service.core-compute-preview.internal
+  ingressHost: chart-em-annotation-release-1.service.core-compute-preview.internal
   ingressIP: "10.97.16.227"
   consulIP: "10.97.11.254"
 

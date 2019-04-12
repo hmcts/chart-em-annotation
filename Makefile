@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := all
 CHART := em-annotation
 CI_VALUES := ci-values.yaml
-RELEASE := chart-${CHART}
+RELEASE := chart-${CHART}-release-1
 NAMESPACE := chart-tests
 TEST := ${RELEASE}-test-service
 ACR := hmctssandbox
@@ -29,7 +29,7 @@ inspect:
 	helm inspect chart ${CHART}
 
 deploy:
-	helm install ${CHART} --name ${RELEASE} --namespace ${NAMESPACE} -f ${CI_VALUES}  --wait  --timeout 600
+	helm install ${CHART} --name ${RELEASE} --namespace ${NAMESPACE} -f ${CI_VALUES}  --wait  --timeout 500
 
 test:
 	helm test ${RELEASE}
