@@ -29,7 +29,7 @@ inspect:
 	helm inspect chart ${CHART}
 
 deploy:
-	helm install ${CHART} --name ${RELEASE} --namespace ${NAMESPACE} -f ${CI_VALUES}  --wait  --timeout 500
+	helm install ${CHART} --name ${RELEASE} --namespace ${NAMESPACE} -f ${CI_VALUES}  --wait  --timeout 550
 
 test:
 	helm test ${RELEASE}

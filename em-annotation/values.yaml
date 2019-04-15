@@ -34,8 +34,6 @@ em-anno:
 #      nameOverride: em-anno-db
     releaseNameOverride: chart-em-annotation-em-anno
     image: hmcts.azurecr.io/hmcts/em-anno:latest
-    # TODO use real liveness path
-    livenessPath: '/health'
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/emannotationapp'
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
@@ -48,8 +46,6 @@ em-npa:
 #      nameOverride: em-npa-db
     releaseNameOverride: chart-em-annotation-em-npa
     image: hmcts.azurecr.io/hmcts/em-npa:latest
-    # TODO use real liveness path
-    livenessPath: '/health'
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/emnpa'
       IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
