@@ -3,13 +3,13 @@
 # Note that this would go in their product chart, not this one.
 
 global:
-  environment: saat
+  environment: demo
   subscriptionId: "bf308a5c-0624-4334-8ff8-8dca9fd43783"
   tenantId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
 
 tags:
   postgresql-pod: false                 # any chart specific postgres
-  blobstorage: true                     # blob storage for dm-store
+  blobstorage: false                     # blob storage for dm-store
 
 postgresql:
   resources:
@@ -30,25 +30,21 @@ postgresql:
 ### EM SERVICES ###
 em-anno:
   anno:
-#    postgresql:
-#      nameOverride: em-anno-db
     releaseNameOverride: chart-em-annotation-em-anno
-    image: hmcts.azurecr.io/hmcts/em-anno:latest
+    image: hmctspublic.azurecr.io/em/anno:latest
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/emannotationapp'
-      IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
+      IDAM_API_BASE_URI: https://idam-api.demo.platform.hmcts.net
       S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
       DM_STORE_APP_URL: http://chart-em-annotation-dm-store
 
 em-npa:
   npa:
-#    postgresql:
-#      nameOverride: em-npa-db
     releaseNameOverride: chart-em-annotation-em-npa
-    image: hmcts.azurecr.io/hmcts/em-npa:latest
+    image: hmctspublic.azurecr.io/em/npa:latest
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/emnpa'
-      IDAM_API_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
+      IDAM_API_BASE_URI: https://idam-api.demo.platform.hmcts.net
       DM_STORE_APP_URL: http://chart-em-annotation-dm-store
       EM_ANNO_APP_URL: http://chart-em-annotation-em-anno
       S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
@@ -57,25 +53,16 @@ em-npa:
 rpe-service-auth-provider:
   java:
     releaseNameOverride: chart-em-annotation-rpe-s2s
-    image: hmcts.azurecr.io/hmcts/rpe-service-auth-provider:latest
+    image: hmctspublic.azurecr.io/rpe/service-auth-provider:latest
 
 dm-store:
-  blobstorage:
-    enabled: true
   java:
-#    postgresql:
-#      nameOverride: dm-store-db
     releaseNameOverride: chart-em-annotation-dm-store
-    image: hmcts.azurecr.io/hmcts/dm-store:latest
+    image: hmctspublic.azurecr.io/dm/store:latest
     keyVaults:
-      ccd:
-        resourceGroup: ccd-shared
-        secrets:
-          - dm-store-storage-account-primary-connection-string
-          - dm-store-storage-account-secondary-connection-string
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/evidence'
-      IDAM_USER_BASE_URI: http://idam-api-idam-saat.service.core-compute-idam-saat.internal
+      IDAM_USER_BASE_URI: https://idam-api.demo.platform.hmcts.net
       IDAM_S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
       ENABLE_DB_MIGRATE: 'true'
       ENABLE_TTL: 'false'
