@@ -43,4 +43,4 @@ jobs:
         parameters:
           chartName: em-annotation
           chartReleaseName: chart-em-annotation-release-1
-          chartNamespace: chart-tests
+          chartNamespace: evidence-mment
