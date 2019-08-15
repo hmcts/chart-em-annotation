@@ -16,17 +16,16 @@ resources:
       endpoint: 'hmcts'
 
 jobs:
-# IGNORE ANY VALIDATION FOR NOW - not sure how this will work... ci-values will be values - any point?
-#  - job: Validate
-#    pool:
-#      vmImage: 'Ubuntu 16.04'
-#    steps:
-#      - template: steps/charts/validate.yaml@cnp-library
-#        parameters:
-#          chartName: em-annotation
-#          chartReleaseName: chart-em-annotation-ci-test
-#          chartNamespace: chart-tests
-#          helmInstallTimeout: "300"
+ - job: Validate
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+      - template: steps/charts/validate.yaml@cnp-library
+        parameters:
+          chartName: em-annotation
+          chartReleaseName: chart-em-annotation-ci-test
+          chartNamespace: chart-tests
+          helmInstallTimeout: "600"
 
   - job: Release
     # Make sure we have a tag to run this job
@@ -35,7 +34,7 @@ jobs:
           succeeded(),
           startsWith(variables['Build.SourceBranch'], 'refs/tags/')
         )
-#    dependsOn: Validate
+    dependsOn: Validate
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
