@@ -16,7 +16,7 @@ resources:
       endpoint: 'hmcts'
 
 jobs:
- - job: Validate
+  - job: Validate
     pool:
       vmImage: 'Ubuntu 16.04'
     steps:
