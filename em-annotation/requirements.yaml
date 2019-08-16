@@ -16,7 +16,7 @@ dependencies:
     repository: '@hmctspublic'
 
   - name: postgresql
-    version: ~3.1.0
+    version: ~5.3.13
     repository: '@stable'
 
 #  - Should I skip IDAM? Yes, no supported IDAM docker images.
