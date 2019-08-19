@@ -14,7 +14,6 @@ tags:
 ### EM SERVICES ###
 em-anno:
   anno:
-    releaseNameOverride: chart-em-annotation-em-anno
     image: hmctspublic.azurecr.io/em/anno:latest
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresl:5432/emannotationapp'
@@ -34,7 +33,7 @@ em-npa:
       SPRING_DATASOURCE_PASSWORD: hmcts
       IDAM_API_BASE_URI: https://idam-api.aat.platform.hmcts.net
       DM_STORE_APP_URL: http://dm-store
-      EM_ANNO_APP_URL: http://chart-em-annotation-em-anno
+      EM_ANNO_APP_URL: http://chart-em-annotation-ci-test-anno
       S2S_BASE_URI: http://rpe-s2s
 
 ##### DEPENDENCIES #####
