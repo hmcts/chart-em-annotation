@@ -11,30 +11,16 @@ tags:
   postgresql-pod: false                 # any chart specific postgres
   blobstorage: false                     # blob storage for dm-store
 
-postgresql:
-  resources:
-    requests:
-      cpu: 25m
-  initdbScripts:
-    init.sql: |-
-      CREATE USER emannotationapp WITH PASSWORD 'emannotationapp';
-      CREATE DATABASE emannotationapp WITH OWNER = emannotationapp ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE USER emnpa WITH PASSWORD 'emnpa';
-      CREATE DATABASE emnpa WITH OWNER = emnpa ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE USER evidence WITH PASSWORD 'evidence';
-      CREATE DATABASE evidence WITH OWNER = evidence ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-  nameOverride: postgres-db
-  persistence:
-    enabled: false
-
 ### EM SERVICES ###
 em-anno:
   anno:
     releaseNameOverride: chart-em-annotation-em-anno
     image: hmctspublic.azurecr.io/em/anno:latest
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/emannotationapp'
-      IDAM_API_BASE_URI: https://idam-api.demo.platform.hmcts.net
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresl:5432/emannotationapp'
+      SPRING_DATASOURCE_USERNAME: hmcts
+      SPRING_DATASOURCE_PASSWORD: hmcts
+      IDAM_API_BASE_URI: https://idam-api.aat.platform.hmcts.net
       S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
       DM_STORE_APP_URL: http://chart-em-annotation-dm-store
 
@@ -43,8 +29,10 @@ em-npa:
     releaseNameOverride: chart-em-annotation-em-npa
     image: hmctspublic.azurecr.io/em/npa:latest
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/emnpa'
-      IDAM_API_BASE_URI: https://idam-api.demo.platform.hmcts.net
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresl:5432/emnpa'
+      SPRING_DATASOURCE_USERNAME: hmcts
+      SPRING_DATASOURCE_PASSWORD: hmcts
+      IDAM_API_BASE_URI: https://idam-api.aat.platform.hmcts.net
       DM_STORE_APP_URL: http://chart-em-annotation-dm-store
       EM_ANNO_APP_URL: http://chart-em-annotation-em-anno
       S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
@@ -61,10 +49,26 @@ dm-store:
     image: hmctspublic.azurecr.io/dm/store:latest
     keyVaults:
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-release-1-postgres-db:5432/evidence'
-      IDAM_USER_BASE_URI: https://idam-api.demo.platform.hmcts.net
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresl:5432/evidence'
+      SPRING_DATASOURCE_USERNAME: hmcts
+      SPRING_DATASOURCE_PASSWORD: hmcts
+      IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
       IDAM_S2S_BASE_URI: http://chart-em-annotation-rpe-s2s
       ENABLE_DB_MIGRATE: 'true'
       ENABLE_TTL: 'false'
-      CCD_DM_STORE_STORAGE_ACC_PRIMARY_CONN_STRING: 'dm-store-storage-account-primary-connection-string'
-      CCD_DM_STORE_STORAGE_ACC_SECONDARY_CONN_STRING: 'dm-store-storage-account-secondary-connection-string'
+      STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: 'DefaultEndpointsProtocol=https;AccountName=AAAAAAAAAAAAAAAA;AccountKey=AAAAAAAAAAAAAAAA;EndpointSuffix=core.windows.net'
+
+postgresql:
+  resources:
+    requests:
+      cpu: 25m
+  initdbScripts:
+    init.sql: |-
+      CREATE DATABASE "evidence" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE DATABASE "emannotationapp" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE DATABASE "emnpa" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+  postgresqlUsername: hmcts
+  postgresqlPassword: hmcts
+  postgresqlDatabase: user-profile
+  persistence:
+    enabled: false
