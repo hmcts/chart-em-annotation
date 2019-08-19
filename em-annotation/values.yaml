@@ -25,7 +25,6 @@ em-anno:
 
 em-npa:
   npa:
-    releaseNameOverride: chart-em-annotation-em-npa
     image: hmctspublic.azurecr.io/em/npa:latest
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresl:5432/emnpa'
