@@ -2,11 +2,6 @@
 # Then they could override em-anno microservice chart to add their team to the s2s whitelist.
 # Note that this would go in their product chart, not this one.
 
-#global:
-#  environment: demo
-#  subscriptionId: "bf308a5c-0624-4334-8ff8-8dca9fd43783"
-#  tenantId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
-
 tags:
   postgresql-pod: false                 # any chart specific postgres
   blobstorage: false                     # blob storage for dm-store
@@ -16,7 +11,7 @@ em-anno:
   anno:
     image: hmctspublic.azurecr.io/em/anno:latest
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresl:5432/emannotationapp'
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresql:5432/emannotationapp'
       SPRING_DATASOURCE_USERNAME: hmcts
       SPRING_DATASOURCE_PASSWORD: hmcts
       IDAM_API_BASE_URI: https://idam-api.aat.platform.hmcts.net
@@ -27,7 +22,7 @@ em-npa:
   npa:
     image: hmctspublic.azurecr.io/em/npa:latest
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresl:5432/emnpa'
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresql:5432/emnpa'
       SPRING_DATASOURCE_USERNAME: hmcts
       SPRING_DATASOURCE_PASSWORD: hmcts
       IDAM_API_BASE_URI: https://idam-api.aat.platform.hmcts.net
@@ -47,7 +42,7 @@ dm-store:
     image: hmctspublic.azurecr.io/dm/store:latest
     keyVaults:
     environment:
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresl:5432/evidence'
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresql:5432/evidence'
       SPRING_DATASOURCE_USERNAME: hmcts
       SPRING_DATASOURCE_PASSWORD: hmcts
       IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
