@@ -19,5 +19,3 @@ dependencies:
     version: ~5.3.0
     repository: '@stable'
 
-#  - Should I skip IDAM? Yes, no supported IDAM docker images.
-#  - Should I skip smtp-server? Yes, probably. IDAM might use it, but we're using SAAT idam, so we don't care if it uses it.
