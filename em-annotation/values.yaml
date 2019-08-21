@@ -15,8 +15,8 @@ em-anno:
       SPRING_DATASOURCE_USERNAME: hmcts
       SPRING_DATASOURCE_PASSWORD: hmcts
       IDAM_API_BASE_URI: https://idam-api.aat.platform.hmcts.net
-      S2S_BASE_URI: http://rpe-s2s
-      DM_STORE_APP_URL: http://dm-store
+      S2S_BASE_URI: http://em-annotation-rpe-s2s
+      DM_STORE_APP_URL: http://em-annotation-dm-store
 
 em-npa:
   npa:
@@ -26,19 +26,19 @@ em-npa:
       SPRING_DATASOURCE_USERNAME: hmcts
       SPRING_DATASOURCE_PASSWORD: hmcts
       IDAM_API_BASE_URI: https://idam-api.aat.platform.hmcts.net
-      DM_STORE_APP_URL: http://dm-store
+      DM_STORE_APP_URL: http://em-annotation-dm-store
       EM_ANNO_APP_URL: http://chart-em-annotation-ci-test-anno
-      S2S_BASE_URI: http://rpe-s2s
+      S2S_BASE_URI: http://em-annotation-rpe-s2s
 
 ##### DEPENDENCIES #####
 rpe-service-auth-provider:
   java:
-    releaseNameOverride: rpe-s2s
+    releaseNameOverride: em-annotation-rpe-s2s
     image: hmctspublic.azurecr.io/rpe/service-auth-provider:latest
 
 dm-store:
   java:
-    releaseNameOverride: dm-store
+    releaseNameOverride: em-annotation-dm-store
     image: hmctspublic.azurecr.io/dm/store:latest
     secrets:
       STORAGE_ACCOUNT_NAME:
@@ -53,7 +53,7 @@ dm-store:
       SPRING_DATASOURCE_USERNAME: hmcts
       SPRING_DATASOURCE_PASSWORD: hmcts
       IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
-      IDAM_S2S_BASE_URI: http://rpe-s2s
+      IDAM_S2S_BASE_URI: http://em-annotation-rpe-s2s
       ENABLE_DB_MIGRATE: 'true'
       ENABLE_TTL: 'false'
       STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: 'DefaultEndpointsProtocol=https;AccountName=AAAAAAAAAAAAAAAA;AccountKey=AAAAAAAAAAAAAAAA;EndpointSuffix=core.windows.net'
