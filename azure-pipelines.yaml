@@ -13,7 +13,7 @@ resources:
       type: github
       ref: master
       name: hmcts/cnp-azuredevops-libraries
-      endpoint: 'HMCTS Github'
+      endpoint: 'hmcts'
 
 jobs:
   - job: Validate
@@ -25,7 +25,7 @@ jobs:
           chartName: em-annotation
           chartReleaseName: chart-em-annotation-ci-test
           chartNamespace: chart-tests
-          helmInstallTimeout: "300"
+          helmInstallTimeout: "600"
 
   - job: Release
     # Make sure we have a tag to run this job
@@ -41,5 +41,5 @@ jobs:
       - template: steps/charts/release.yaml@cnp-library
         parameters:
           chartName: em-annotation
-          chartReleaseName: chart-em-annotation-release-1
+          chartReleaseName: chart-em-annotation
           chartNamespace: chart-tests
