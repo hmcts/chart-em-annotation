@@ -40,6 +40,13 @@ dm-store:
   java:
     releaseNameOverride: dm-store
     image: hmctspublic.azurecr.io/dm/store:latest
+    secrets:
+      STORAGE_ACCOUNT_NAME:
+        disabled: true
+      STORAGE_ACCOUNT_KEY:
+        disabled: true
+      STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
+        disabled: true
     keyVaults:
     environment:
       SPRING_DATASOURCE_URL: 'jdbc:postgresql://chart-em-annotation-ci-test-postgresql:5432/evidence'
